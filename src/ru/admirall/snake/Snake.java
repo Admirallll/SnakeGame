@@ -1,8 +1,9 @@
 package ru.admirall.snake;
 
+import java.util.Iterator;
 import java.util.List;
 
-public class Snake {
+public class Snake implements Iterable<SnakePart> {
 	
 	private SnakePart head;
 	private SnakePart tail;
@@ -13,17 +14,20 @@ public class Snake {
 		location = new Location(x, y);
 	}
 	
+	public SnakePart getTail() {
+		return tail;
+	}
+	
 	public void moveSnake(Direction direction, boolean needNewPart) {
 		Offset moveOffset = direction.directionToOffset();
 		location = location.offsetLocation(moveOffset);
-		SnakePart currentPart = tail;
 		if (needNewPart) {
 			addPart();
 		}
-		while (currentPart != head) {
-			currentPart.setLocalOffset(currentPart.getNextPart().getLocalOffset()
-					.summOffset(moveOffset.reverseOffset()));
-			currentPart = currentPart.getNextPart();
+		for (SnakePart currentPart : this) {
+			if (currentPart != head)
+				currentPart.setLocalOffset(currentPart.getNextPart().getLocalOffset()
+						.summOffset(moveOffset.reverseOffset()));
 		}
 	}
 	
@@ -36,5 +40,10 @@ public class Snake {
 	
 	public Location getLocation() {
 		return location;
+	}
+
+	@Override
+	public Iterator<SnakePart> iterator() {
+		return new SnakeIterator(this);
 	}
 }
