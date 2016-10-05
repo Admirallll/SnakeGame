@@ -1,5 +1,8 @@
 package ru.admirall.snake;
 
+import java.lang.Object;
+
+
 public class Location {
 	
 	private int x;
@@ -17,8 +20,26 @@ public class Location {
 	public int getY() {
 		return y;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Location loc = null;
+		if (obj instanceof Location) {
+			loc = (Location)obj;
+		}
+		return x == loc.x && y == loc.y;
+	}
 	
-	public Location offsetLocation(Offset offset) {
-		return new Location(x + offset.getXOffset(), y + offset.getYOffset());
+	@Override
+	public int hashCode() {
+		return x * 437 + y;
+	}
+	
+	public Location offsetLocation(Location location) {
+		return new Location(x + location.getX(), y + location.getY());
+	}
+	
+	public Location reverseLocation(Location location) {
+		return new Location(x * -1, y * -1);
 	}
 }

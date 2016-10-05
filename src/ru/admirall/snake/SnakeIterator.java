@@ -1,5 +1,6 @@
 package ru.admirall.snake;
 
+
 import java.util.Iterator;
 
 public class SnakeIterator implements Iterator<SnakePart> {

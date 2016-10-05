@@ -1,18 +1,18 @@
 package ru.admirall.snake;
 
-public class Object {
+
+public abstract class Object {
 	private Location location;
-	private ObjectType type;
 	
-	public Object(ObjectType type) {
-		this.type = type;
+	public Object(Location location) {
+		this.location = location;
 	}
 	
 	public Location getLocation() {
 		return location;
 	}
 	
-	public ObjectType getType() {
-		return type;
-	}
+	public abstract void collisionAction(SnakeGame game);
+	
+	public abstract String visit(IVisitor imageVisitor);
 }

@@ -1,0 +1,5 @@
+width:20
+height:20
+snake:5,5
+apple:7,5
+borders:true

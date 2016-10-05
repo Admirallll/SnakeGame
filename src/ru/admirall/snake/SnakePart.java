@@ -1,13 +1,14 @@
 package ru.admirall.snake;
 
+
 public class SnakePart {
 	
-	private Offset localOffset;
+	private Location location;
 	private SnakePart nextPart;
 	private SnakePart prevPart;
 	
-	public SnakePart(Offset localOffset) {
-		this.localOffset = localOffset;
+	public SnakePart(Location location) {
+		this.location = location;
 	}
 	
 	public SnakePart getNextPart() {
@@ -18,12 +19,12 @@ public class SnakePart {
 		return prevPart;
 	}
 	
-	public Offset getLocalOffset() {
-		return localOffset;
+	public Location getLocation() {
+		return location;
 	}
 	
-	public void setLocalOffset(Offset newOffset) {
-		localOffset = newOffset;
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 	
 	public void setNextPart(SnakePart nextPart) {
