@@ -19,4 +19,19 @@ public enum Direction {
 		}};
 		return dirToOffset.get(this);
 	}
+	
+	public boolean isOpposingDirections(Direction other) {
+		return this.reverseDirection() == other;
+	}
+	
+	public Direction reverseDirection() {
+		if (this == Direction.North)
+			return Direction.South;
+		else if (this == Direction.South)
+			return Direction.North;
+		else if (this == Direction.East)
+			return Direction.West;
+		else 
+			return Direction.East;
+	}
 }

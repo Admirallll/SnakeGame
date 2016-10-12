@@ -11,19 +11,18 @@ public class SnakeGame {
 	
 	private int width;
 	private int height;
-	private Snake snake;
-	private int score;
-	private List<Object> objects;
+	private List<GameObject> objects;
 	private boolean isEnded;
-	private Direction currentDirection;
+	private int applesToCreate;
+	private ArrayList<Player> players;
 	
-	public SnakeGame(LevelInfo levelInfo) {
+	public SnakeGame(LevelInfo levelInfo, ArrayList<Player> players) {
 		width = levelInfo.width;
         height = levelInfo.height;
-        snake = new Snake(levelInfo.snakeStart);
         objects = levelInfo.objects;
         if (levelInfo.borders)
         	placeBorders();
+        this.players = players;
 	}
 	
 	public void placeBorders() {
@@ -41,52 +40,69 @@ public class SnakeGame {
 		return height;
 	}
 	
-	public Snake getSnake() {
-		return snake;
-	}
-	
-	public List<Object> getObjects() {
+	public List<GameObject> getObjects() {
 		return objects;
 	}
 	
+	public void addApplesToCreate(int apples) {
+		applesToCreate += apples;
+	}
+	
+	public void createAppleOnField() {
+		Location randomLocation = getRandomEmptyLocation();
+		addObject(new Apple(randomLocation));
+	}
+	
 	public void gameTurn() {
-		List<Object> objectsForIteration = new ArrayList<Object>(objects);
-		Location snakeNextLocation = snake.getLocation().offsetLocation(currentDirection.directionToLocation());
-		
-		for (Object obj : objectsForIteration) {
-			if (obj.getLocation().equals(snakeNextLocation)) {
-				obj.collisionAction(this);
-			}	
-		}
-
-		snake.moveSnake(currentDirection);
-		
-		for (SnakePart snakePart : snake) {
-			if (snakePart != snake.getHead() && snakePart.getLocation().equals(snake.getHead().getLocation())) {
-				isEnded = true;
-				return;
+		List<GameObject> objectsForIteration = new ArrayList<GameObject>(objects);
+		for (Player player : players)
+		{
+			if (!player.isAlive())
+				continue;
+			Location snakeNextLocation = player.getSnake().getLocation().offsetLocation(player.getSnake().getCurrentDirection().directionToLocation());
+			for (GameObject obj : objectsForIteration) {
+				if (obj.getLocation().equals(snakeNextLocation)) {
+					obj.collisionAction(this, player);
+				}
 			}
+			for (Player secondPlayer : players) {
+				for (SnakePart snakePart : secondPlayer.getSnake())
+					if (snakePart != player.getSnake().getHead() && snakePart.getLocation().equals(player.getSnake().getLocation()))
+						player.getSnake().collisionAction(this, player);
+			}
+			player.playerTurn();
+		}
+		
+		isEnded = checkEndGameCondition();
+		
+		while (applesToCreate > 0) {
+			createAppleOnField();
+			applesToCreate--;
 		}
 	}
+	
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+	
+	public boolean checkEndGameCondition() {
+		int alivePlayers = 0;
+		for (Player player : players)
+			if (player.isAlive())
+				alivePlayers++;
+		return alivePlayers < 2;
+	}
 		
-	public void addObject(Object obj) {
+	public void addObject(GameObject obj) {
 		objects.add(obj);
 	}
 	
-	public void deleteObject(Object obj) {
+	public void deleteObject(GameObject obj) {
 		objects.remove(obj);
 	}
-	
-	public void addScore(int scores) {
-		score += scores;
-	}
-	
+
 	public void endGame() {
 		isEnded = true;
-	}
-	
-	public Direction getCurrentDirection() {
-		return currentDirection;
 	}
 	
 	public boolean isEnded() {
@@ -95,10 +111,11 @@ public class SnakeGame {
 	
 	public Set<Location> getNonEmptyLocations() {
 		Set<Location> result = new HashSet<Location>();
-		for (Object obj : objects)
+		for (GameObject obj : objects)
 			result.add(obj.getLocation());
-		for (SnakePart part : snake)
-			result.add(part.getLocation());
+		for (Player player : players)
+			for (SnakePart part : player.getSnake())
+				result.add(part.getLocation());
 		return result;
 	}
 	
@@ -116,9 +133,5 @@ public class SnakeGame {
 	
 	public boolean isLocationOnMap(Location location) {
 		return location.getX() >= 0 && location.getX() < width && location.getY() >= 0 && location.getY() < height;
-	}
-	
-	public void changeDirection(Direction newDirection) {
-		currentDirection = newDirection;
 	}
 }

@@ -8,10 +8,10 @@ public class LevelInfo {
 	public int width;
 	public int height;
 	public Location snakeStart;
-	public List<Object> objects;
+	public List<GameObject> objects;
 	public boolean borders;
 	
 	public LevelInfo() {
-		objects = new ArrayList<Object>();
+		objects = new ArrayList<GameObject>();
 	}
 }

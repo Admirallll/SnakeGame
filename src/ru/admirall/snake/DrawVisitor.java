@@ -1,6 +1,6 @@
 package ru.admirall.snake;
 
-public class ImageVisitor implements IVisitor {
+public class DrawVisitor implements IVisitor {
 
 	@Override
 	public String visit(Apple obj) {

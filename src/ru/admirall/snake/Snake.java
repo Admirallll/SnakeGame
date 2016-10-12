@@ -7,26 +7,40 @@ public class Snake implements Iterable<SnakePart> {
 	
 	private SnakePart head;
 	private SnakePart tail;
+	private Direction currentDirection;
 	
 	public Snake(Location headLocation) {
 		head = tail = new SnakePart(headLocation);
+		currentDirection = Direction.East;
+	}
+	
+	public Direction getCurrentDirection() {
+		return currentDirection;
 	}
 	
 	public SnakePart getTail() {
 		return tail;
 	}
 	
-	public void moveSnake(Direction direction) {
+	public void collisionAction(SnakeGame game, Player player) {
+		player.setAlive(false);
+	}
+	
+	public void setDirection(Direction direction) {
+		if (direction != null)
+			currentDirection = direction;
+	}
+	
+	public void moveSnake() {
 		for (SnakePart currentPart : this) {
 			if (currentPart != head)
 				currentPart.setLocation(currentPart.getNextPart().getLocation());
 		}
-		Location moveOffset = direction.directionToLocation();
-		head.setLocation(head.getLocation().offsetLocation(moveOffset));
+		head.setLocation(head.getLocation().offsetLocation(currentDirection.directionToLocation()));
 	}
 	
-	public String visit(IVisitor imageVisitor) {
-		return imageVisitor.visit(this);
+	public String visit(IVisitor visitor) {
+		return visitor.visit(this);
 	}
 	
 	public SnakePart getHead() {
@@ -34,7 +48,7 @@ public class Snake implements Iterable<SnakePart> {
 	}
 	
 	public void addPart() {
-		SnakePart newPart = new SnakePart(new Location(0, 0)); // sdfasdf
+		SnakePart newPart = new SnakePart(new Location(0, 0));
 		newPart.setNextPart(tail);
 		tail.setPrevPart(newPart);
 		tail = newPart;
