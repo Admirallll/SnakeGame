@@ -61,21 +61,23 @@ public class MainWindow extends JFrame implements ActionListener
         return players;
     }
     
-    public Map<Integer, Direction> getPlayer1Keys() {
-    	Map<Integer, Direction> keys = new HashMap<Integer, Direction>();
-    	keys.put(KeyEvent.VK_W, Direction.North);
-    	keys.put(KeyEvent.VK_S, Direction.South);
-    	keys.put(KeyEvent.VK_A, Direction.West);
-    	keys.put(KeyEvent.VK_D, Direction.East);
+    public Map<Integer, ControllerAction> getPlayer1Keys() {
+    	Map<Integer, ControllerAction> keys = new HashMap<Integer, ControllerAction>();
+    	keys.put(KeyEvent.VK_W, (player) -> player.getSnake().setDirection(Direction.North));
+    	keys.put(KeyEvent.VK_S, (player) -> player.getSnake().setDirection(Direction.South));
+    	keys.put(KeyEvent.VK_A, (player) -> player.getSnake().setDirection(Direction.West));
+    	keys.put(KeyEvent.VK_D,(player) ->  player.getSnake().setDirection(Direction.East));
+    	keys.put(KeyEvent.VK_SPACE, (player) -> game.changeSnakeColor(player.getSnake()));
     	return keys;
     }
     
-    public Map<Integer, Direction> getPlayer2Keys() {
-    	Map<Integer, Direction> keys = new HashMap<Integer, Direction>();
-    	keys.put(KeyEvent.VK_UP, Direction.North);
-    	keys.put(KeyEvent.VK_DOWN, Direction.South);
-    	keys.put(KeyEvent.VK_LEFT, Direction.West);
-    	keys.put(KeyEvent.VK_RIGHT, Direction.East);
+    public Map<Integer, ControllerAction> getPlayer2Keys() {
+    	Map<Integer, ControllerAction> keys = new HashMap<Integer, ControllerAction>();
+    	keys.put(KeyEvent.VK_UP, (player) -> player.getSnake().setDirection(Direction.North));
+    	keys.put(KeyEvent.VK_DOWN, (player) -> player.getSnake().setDirection(Direction.South));
+    	keys.put(KeyEvent.VK_LEFT, (player) -> player.getSnake().setDirection(Direction.West));
+    	keys.put(KeyEvent.VK_RIGHT,(player) ->  player.getSnake().setDirection(Direction.East));
+    	keys.put(KeyEvent.VK_ENTER, (player) -> game.changeSnakeColor(player.getSnake()));
     	return keys;
     }
 

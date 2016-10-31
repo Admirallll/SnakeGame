@@ -6,6 +6,8 @@ import java.util.Iterator;
 
 public class Snake implements Iterable<SnakePart>, ICollider {
 	
+	
+	private Direction prevDirection;
 	private SnakePart head;
 	private SnakePart tail;
 	private Direction currentDirection;
@@ -38,11 +40,12 @@ public class Snake implements Iterable<SnakePart>, ICollider {
 	}
 	
 	public void setDirection(Direction direction) {
-		if (direction != null)
+		if (direction != null && !direction.isOpposingDirections(prevDirection))
 			currentDirection = direction;
 	}
 	
 	public void moveSnake() {
+		prevDirection = currentDirection;
 		for (SnakePart currentPart : this) {
 			if (currentPart != head)
 				currentPart.setLocation(currentPart.getNextPart().getLocation());

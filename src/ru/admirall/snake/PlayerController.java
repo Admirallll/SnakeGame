@@ -1,40 +1,26 @@
 package ru.admirall.snake;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Stack;
 
 public class PlayerController implements IPlayerController {
-	private Map<Integer, Direction> keyToDirection;
-	private Stack<Direction> directions = new Stack<Direction>();
+	private Map<Integer, ControllerAction> keyToAction;
+	private ArrayList<ControllerAction> actions = new ArrayList<ControllerAction>();
 	
-	public PlayerController(Map<Integer, Direction> keys) {
-		this.keyToDirection = keys;
+	public PlayerController(Map<Integer, ControllerAction> keysToActions) {
+		this.keyToAction = keysToActions;
 	}
 	
 	public void listenKey(int keyCode) {
-		if (keyToDirection != null && keyToDirection.containsKey(keyCode))
-			directions.push(keyToDirection.get(keyCode));
+		if (keyToAction != null && keyToAction.containsKey(keyCode))
+			actions.add(keyToAction.get(keyCode));
 	}
 
 	public void controlSnake(SnakeGame game, Player player) {
-		Direction direction = null;
-		while (!directions.isEmpty()) {
-			direction = directions.pop();
-			if (!direction.isOpposingDirections(player.getSnake().getCurrentDirection()))
-				break;
-		}
-		if (direction != null)
-			player.getSnake().setDirection(direction);
-		directions = new Stack<Direction>();
+		for (ControllerAction act : actions)
+			act.action(player);
+		actions.clear();
 	}
-	
-	public void changeSnakeColor(SnakeGame game, Snake snake) {
-		for (Player player : game.getPlayers())
-			for (Color color : game.getColors())
-				if (color != player.getSnake().getColor())
-					snake.setColor(color);
-	}
-	
-	
 }

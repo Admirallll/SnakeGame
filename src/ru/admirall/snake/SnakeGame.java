@@ -28,6 +28,13 @@ public class SnakeGame {
         colors = createColors();
 	}
 	
+	public void changeSnakeColor(Snake snake) {
+		for (Player player : getPlayers())
+			for (Color color : getColors())
+				if (color != player.getSnake().getColor())
+					snake.setColor(color);
+	}
+	
 	public ArrayList<Color> createColors() {
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.add(Color.BLUE);
