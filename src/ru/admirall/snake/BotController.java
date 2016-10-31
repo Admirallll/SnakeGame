@@ -6,15 +6,21 @@ import java.util.Random;
 public class BotController implements IPlayerController {
 	@Override
 	public void controlSnake(SnakeGame game, Player player) {
-		ArrayList<Direction> freeDirections = new ArrayList<Direction>();
+	    Direction current = player.getSnake().getCurrentDirection();
+		ArrayList<Direction> freeDirections = new ArrayList<>();
 		for (Direction dir : Direction.values())
 		{
-			if (!dir.isOpposingDirections(player.getSnake().getCurrentDirection()))
-				if (game.checkNextSnakeLocation(player, dir).size() == 0)
-					freeDirections.add(dir);
+			if (!dir.isOpposingDirections(current)) {
+			    Location location = player.getSnake().getLocation().offsetLocation(dir.directionToLocation());
+                if (game.getCollisions(location, player.getSnake().getHead()).size() == 0)
+                    freeDirections.add(dir);
+            }
 		}
-		Random rng = new Random();
-		if (freeDirections.size() > 0)
-			player.getSnake().setDirection(freeDirections.get(rng.nextInt(freeDirections.size())));
+		Random random = new Random();
+		if (freeDirections.size() > 0){
+		    if (!freeDirections.contains(current) || random.nextInt(30) < 10)
+                player.getSnake().setDirection(freeDirections.get(random.nextInt(freeDirections.size())));
+        }
+
 	}
 }

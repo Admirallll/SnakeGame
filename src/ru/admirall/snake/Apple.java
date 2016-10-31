@@ -7,12 +7,12 @@ public class Apple extends GameObject {
 	}
 	
 	public void collisionAction(SnakeGame game, Player player) {
-		game.deleteObject(this);
+		game.getLevel().deleteObject(this);
 		game.addApplesToCreate(1);
 		player.getSnake().addPart();	
 	}
 	
-	public void visit(IVisitor visitor) {
+	public void accept(IVisitor visitor) {
 		visitor.visit(this);
 	}
 }

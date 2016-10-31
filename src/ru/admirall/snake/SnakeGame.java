@@ -9,21 +9,16 @@ import java.util.Random;
 import java.util.Set;
 
 public class SnakeGame {
-	
-	private int width;
-	private int height;
-	private List<GameObject> objects;
+
 	private boolean isEnded;
 	private int applesToCreate;
-	private ArrayList<Color> colors;
-	private ArrayList<Player> players;
+	private List<Color> colors;
+	private List<Player> players;
+	private Level[] levels;
+	private int currentLevelIndex;
 	
-	public SnakeGame(LevelInfo levelInfo, ArrayList<Player> players) {
-		width = levelInfo.width;
-        height = levelInfo.height;
-        objects = levelInfo.objects;
-        if (levelInfo.borders)
-        	placeBorders();
+	public SnakeGame(Level[] levels, List<Player> players) {
+		this.levels = levels;
         this.players = players;
         colors = createColors();
 	}
@@ -44,28 +39,17 @@ public class SnakeGame {
 		return colors;
 	}
 	
-	public ArrayList<Color> getColors() {
+	public List<Color> getColors() {
 		return colors;
 	}
-	
-	public void placeBorders() {
-		for (int x = 0; x < width; x++)
-			for (int y = 0; y < height; y++)
-				if (x == 0 || y == 0 || x == width-1 || y == height-1)
-					objects.add(new Wall(new Location(x, y)));
-	}
-	
-	public int getWidth() {
-		return width;
-	}
-	
-	public int getHeight() {
-		return height;
-	}
-	
-	public List<GameObject> getObjects() {
-		return objects;
-	}
+
+	public Level getLevel(){
+	    return levels[currentLevelIndex];
+    }
+
+    public void setCurrentLevelIndex(int index){
+        currentLevelIndex = index;
+    }
 	
 	public void addApplesToCreate(int apples) {
 		applesToCreate += apples;
@@ -73,7 +57,7 @@ public class SnakeGame {
 	
 	public void createAppleOnField() {
 		Location randomLocation = getRandomEmptyLocation();
-		addObject(new Apple(randomLocation));
+		getLevel().addObject(new Apple(randomLocation));
 	}
 	
 	public void gameTurn() {
@@ -81,12 +65,12 @@ public class SnakeGame {
 			player.playerTurn(this);
 			if (!player.isAlive())
 				continue;
-			for (ICollider obj : checkNextSnakeLocation(player))
+			for (ICollider obj : getCollisions(player.getSnake().getHead()))
 				obj.collisionAction(this, player);
 			player.getSnake().moveSnake();
 		}
 		
-		isEnded = checkEndGameCondition();
+		isEnded = isGameEnded();
 		
 		while (applesToCreate > 0) {
 			createAppleOnField();
@@ -94,45 +78,32 @@ public class SnakeGame {
 		}
 	}
 	
-	public ArrayList<ICollider> checkNextSnakeLocation(Player player, Direction direction) {
-		ArrayList<ICollider> res = new ArrayList<ICollider>();
-		List<GameObject> objectsForIteration = new ArrayList<GameObject>(objects);
-		Location snakeNextLocation = player.getSnake().getLocation().offsetLocation(direction.directionToLocation());
-		for (GameObject obj : objectsForIteration) {
-			if (obj.getLocation().equals(snakeNextLocation)) {
-				res.add(obj);				
-			}
-		}
-		for (Player secondPlayer : players) {
-			for (SnakePart snakePart : secondPlayer.getSnake())
-				if (snakePart != player.getSnake().getHead() && snakePart.getLocation().equals(player.getSnake().getLocation()))
-					res.add(player.getSnake());
-		}
-		return res;
+	public List<ICollider> getCollisions(SnakePart target) {
+        return getCollisions(target.getLocation(), target);
 	}
-	
-	public ArrayList<ICollider> checkNextSnakeLocation(Player player) {
-		return checkNextSnakeLocation(player, player.getSnake().getCurrentDirection());
-	}
-	
-	public ArrayList<Player> getPlayers() {
+
+	public List<ICollider> getCollisions(Location location, SnakePart target){
+        List<ICollider> result = new ArrayList<>();
+        result.addAll(getLevel().getObjects(location));
+
+        for (Player player : players) {
+            for (SnakePart snakePart : player.getSnake())
+                if (snakePart.getLocation().equals(location) && !snakePart.equals(target))
+                    result.add(player.getSnake());
+        }
+        return result;
+    }
+
+	public List<Player> getPlayers() {
 		return players;
 	}
 	
-	public boolean checkEndGameCondition() {
+	private boolean isGameEnded() {
 		int alivePlayers = 0;
 		for (Player player : players)
 			if (player.isAlive())
 				alivePlayers++;
 		return alivePlayers < 2;
-	}
-		
-	public void addObject(GameObject obj) {
-		objects.add(obj);
-	}
-	
-	public void deleteObject(GameObject obj) {
-		objects.remove(obj);
 	}
 
 	public void endGame() {
@@ -144,8 +115,8 @@ public class SnakeGame {
 	}
 	
 	public Set<Location> getNonEmptyLocations() {
-		Set<Location> result = new HashSet<Location>();
-		for (GameObject obj : objects)
+		Set<Location> result = new HashSet<>();
+		for (GameObject obj : getLevel())
 			result.add(obj.getLocation());
 		for (Player player : players)
 			for (SnakePart part : player.getSnake())
@@ -158,14 +129,10 @@ public class SnakeGame {
 		Random rng = new Random();
 		Location currentLocation;
 		while (true) {
-			currentLocation = new Location(rng.nextInt(width), rng.nextInt(height));
+			currentLocation = new Location(rng.nextInt(getLevel().width), rng.nextInt(getLevel().height));
 			if (!nonEmpty.contains(currentLocation))
 				break;
 		}
 		return currentLocation;
-	}
-	
-	public boolean isLocationOnMap(Location location) {
-		return location.getX() >= 0 && location.getX() < width && location.getY() >= 0 && location.getY() < height;
 	}
 }

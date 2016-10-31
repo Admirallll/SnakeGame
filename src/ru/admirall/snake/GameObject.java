@@ -14,5 +14,5 @@ public abstract class GameObject implements ICollider {
 	
 	public abstract void collisionAction(SnakeGame game, Player player);
 	
-	public abstract void visit(IVisitor visitor);
+	public abstract void accept(IVisitor visitor);
 }

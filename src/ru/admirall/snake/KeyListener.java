@@ -7,20 +7,20 @@ import java.util.List;
 
 public class KeyListener extends KeyAdapter
 {
-	private List<PlayerController> controllers;
+	private List<KeyboardPlayerController> controllers;
 	
 	public KeyListener() {
 		super();
-		controllers = new ArrayList<PlayerController>(); 
+		controllers = new ArrayList<KeyboardPlayerController>();
 	}
 	
-	public void addListener(PlayerController controller) {
+	public void addListener(KeyboardPlayerController controller) {
 		controllers.add(controller);
 	}
 	
     public void keyPressed(KeyEvent keyEvent)
     {
-        for (PlayerController controller: controllers)
+        for (KeyboardPlayerController controller: controllers)
 			controller.listenKey(keyEvent.getKeyCode());
     }
 }

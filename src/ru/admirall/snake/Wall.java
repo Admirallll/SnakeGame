@@ -7,10 +7,10 @@ public class Wall extends GameObject {
 	}
 
 	public void collisionAction(SnakeGame game, Player player) {
-		player.setAlive(false);;
+		player.setAlive(false);
 	}
 	
-	public void visit(IVisitor visitor) {
+	public void accept(IVisitor visitor) {
 		visitor.visit(this);
 	}
 }

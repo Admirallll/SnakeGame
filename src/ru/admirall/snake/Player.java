@@ -33,8 +33,8 @@ public class Player {
 		return isAlive;
 	}
 	
-	public PlayerController getController() {
-		return (PlayerController) controller;
+	public KeyboardPlayerController getController() {
+		return (KeyboardPlayerController) controller;
 	}
 	
 }
