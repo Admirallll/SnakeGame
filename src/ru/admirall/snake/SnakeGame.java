@@ -1,6 +1,7 @@
 package ru.admirall.snake;
 
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +15,7 @@ public class SnakeGame {
 	private List<GameObject> objects;
 	private boolean isEnded;
 	private int applesToCreate;
+	private ArrayList<Color> colors;
 	private ArrayList<Player> players;
 	
 	public SnakeGame(LevelInfo levelInfo, ArrayList<Player> players) {
@@ -23,6 +25,20 @@ public class SnakeGame {
         if (levelInfo.borders)
         	placeBorders();
         this.players = players;
+        colors = createColors();
+	}
+	
+	public ArrayList<Color> createColors() {
+		ArrayList<Color> colors = new ArrayList<Color>();
+		colors.add(Color.BLUE);
+		colors.add(Color.CYAN);
+		colors.add(Color.RED);
+		colors.add(Color.GREEN);
+		return colors;
+	}
+	
+	public ArrayList<Color> getColors() {
+		return colors;
 	}
 	
 	public void placeBorders() {
@@ -54,23 +70,13 @@ public class SnakeGame {
 	}
 	
 	public void gameTurn() {
-		List<GameObject> objectsForIteration = new ArrayList<GameObject>(objects);
-		for (Player player : players)
-		{
+		for (Player player : players) {
+			player.playerTurn(this);
 			if (!player.isAlive())
 				continue;
-			Location snakeNextLocation = player.getSnake().getLocation().offsetLocation(player.getSnake().getCurrentDirection().directionToLocation());
-			for (GameObject obj : objectsForIteration) {
-				if (obj.getLocation().equals(snakeNextLocation)) {
-					obj.collisionAction(this, player);
-				}
-			}
-			for (Player secondPlayer : players) {
-				for (SnakePart snakePart : secondPlayer.getSnake())
-					if (snakePart != player.getSnake().getHead() && snakePart.getLocation().equals(player.getSnake().getLocation()))
-						player.getSnake().collisionAction(this, player);
-			}
-			player.playerTurn();
+			for (ICollider obj : checkNextSnakeLocation(player))
+				obj.collisionAction(this, player);
+			player.getSnake().moveSnake();
 		}
 		
 		isEnded = checkEndGameCondition();
@@ -79,6 +85,27 @@ public class SnakeGame {
 			createAppleOnField();
 			applesToCreate--;
 		}
+	}
+	
+	public ArrayList<ICollider> checkNextSnakeLocation(Player player, Direction direction) {
+		ArrayList<ICollider> res = new ArrayList<ICollider>();
+		List<GameObject> objectsForIteration = new ArrayList<GameObject>(objects);
+		Location snakeNextLocation = player.getSnake().getLocation().offsetLocation(direction.directionToLocation());
+		for (GameObject obj : objectsForIteration) {
+			if (obj.getLocation().equals(snakeNextLocation)) {
+				res.add(obj);				
+			}
+		}
+		for (Player secondPlayer : players) {
+			for (SnakePart snakePart : secondPlayer.getSnake())
+				if (snakePart != player.getSnake().getHead() && snakePart.getLocation().equals(player.getSnake().getLocation()))
+					res.add(player.getSnake());
+		}
+		return res;
+	}
+	
+	public ArrayList<ICollider> checkNextSnakeLocation(Player player) {
+		return checkNextSnakeLocation(player, player.getSnake().getCurrentDirection());
 	}
 	
 	public ArrayList<Player> getPlayers() {

@@ -1,6 +1,8 @@
 package ru.admirall.snake;
 
 import javax.swing.*;
+
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,31 +12,47 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.awt.image.BufferedImage;
+
 public class MainWindow extends JFrame implements ActionListener
 {
     private final int speed = 5;
     private final int textureSize = 32;
     private SnakeGame game;
     private Timer timer = new Timer(1000 / speed, this);
-    private IVisitor drawVisitor = new DrawVisitor();
+    private IVisitor drawVisitor;
+    
+    private BufferedImage image;
+    private Graphics bufferedGraphics;
+    
+    public DrawVisitor getDrawVisitor() {
+    	return (DrawVisitor) drawVisitor;
+    }
 
-    private MainWindow(LevelInfo levelInfo)
+    public MainWindow(LevelInfo levelInfo)
     {
     	super("Snake game");
         game = new SnakeGame(levelInfo, createPlayers());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        drawVisitor = new DrawVisitor();
         setSize(game.getWidth() * textureSize, game.getHeight() * textureSize);
         setResizable(false);
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        image = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
+        bufferedGraphics = image.createGraphics();
+        bufferedGraphics.setColor(Color.LIGHT_GRAY);
         timer.start();
     }
     
     public ArrayList<Player> createPlayers() {
     	ArrayList<Player> players = new ArrayList<Player>();
-        Player player1 = new Player(new PlayerController(getPlayer1Keys()), new Location(5, 5));
-        Player player2 = new Player(new PlayerController(getPlayer2Keys()), new Location(10, 10));
+        Player player1 = new Player(new PlayerController(getPlayer1Keys()), new Location(5, 5), Color.GREEN);
+        Player player2 = new Player(new PlayerController(getPlayer2Keys()), new Location(1, 1), Color.RED);
+        Player botPlayer1 = new Player(new BotController(), new Location(10, 10), Color.BLUE);
         players.add(player1);
+        players.add(botPlayer1);
         players.add(player2);
         KeyListener keyListener = new KeyListener();
         keyListener.addListener(player1.getController());
@@ -60,58 +78,42 @@ public class MainWindow extends JFrame implements ActionListener
     	keys.put(KeyEvent.VK_RIGHT, Direction.East);
     	return keys;
     }
-    
-    public void drawSnake(Graphics g, Snake snake) {
-    	for(SnakePart snakePart : snake)
-        {
-            int x = snakePart.getLocation().getX();
-            int y = snakePart.getLocation().getY();
-            drawTexture(g, snake.visit(drawVisitor), x, y);
-        }
-    }
+
 
     public void paint(Graphics g)
     {
-    	g.clearRect(0, 0, game.getWidth() * textureSize, game.getHeight() * textureSize);
+        bufferedGraphics.fill3DRect(0, 0, getWidth(), getHeight(), true);
     	for (Player player : game.getPlayers())
-    		drawSnake(g, player.getSnake());
+    		if (player.isAlive())
+    			player.getSnake().accept(drawVisitor);
         List<GameObject> objects = game.getObjects();
-        drawObjects(g, objects);
-
-        
+        drawObjects(objects);        
+        g.drawImage(image, 0, 0, getSize().width, getSize().height, null);
     }
     
-    public void drawObjects(Graphics g, List<GameObject> objects) {
+    public void drawObjects(List<GameObject> objects) {
     	for(GameObject object : objects)
-        {
-            int x = object.getLocation().getX();
-            int y = object.getLocation().getY();
-            drawTexture(g, object.visit(drawVisitor), x, y);
-        }
-    }
-
-    private void drawTexture(Graphics g, String filename, int x, int y)
-    {
-        String folder = "pics\\";
-        g.drawImage(new ImageIcon(folder + filename).getImage(), x * textureSize, y * textureSize, null);
+            object.visit(drawVisitor);
     }
 
     @Override
-    public void actionPerformed(ActionEvent arg0)
-    {
-    	for (Player player : game.getPlayers())
-    		player.getSnake().setDirection(player.getController().getDirection());
+    public void actionPerformed(ActionEvent arg0) {
         game.gameTurn();
         if (game.isEnded())
-        	setVisible(false);
+        	System.exit(0);
         repaint();
     }
-
+    
+    public Graphics getBufferedGraphics() {
+    	return bufferedGraphics;
+    }
+    
     public static void main(String [] args)
     {
         LevelInfo levelInfo = LevelLoader.loadLevelFromFile("level.txt");
-        System.out.println(levelInfo);
         JFrame frame = new MainWindow(levelInfo);
         frame.setVisible(true);
+        MainWindow mainWindow = (MainWindow) frame;
+        mainWindow.getDrawVisitor().setGraphics(mainWindow.getBufferedGraphics());
     }
 }

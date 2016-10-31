@@ -1,6 +1,5 @@
 package ru.admirall.snake;
 
 public interface IPlayerController {
-	public Direction getDirection();
-	public void updateSnakeDirectionInController(Direction direction);
+	public void controlSnake(SnakeGame game, Player player);
 }

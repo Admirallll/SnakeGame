@@ -1,14 +1,16 @@
 package ru.admirall.snake;
 
+import java.awt.Color;
+
 public class Player {
 	private Snake snake;
 	private int score;
 	private IPlayerController controller;
 	private boolean isAlive = true;
 	
-	public Player(IPlayerController controller, Location snakeLocation) {
+	public Player(IPlayerController controller, Location snakeLocation, Color snakeColor) {
 		this.controller = controller;
-		snake = new Snake(snakeLocation);
+		snake = new Snake(snakeLocation, snakeColor);
 	}
 	
 	public Snake getSnake() {
@@ -23,9 +25,8 @@ public class Player {
 		this.isAlive = isAlive;
 	}
 	
-	public void playerTurn() {
-		controller.updateSnakeDirectionInController(snake.getCurrentDirection());
-		snake.moveSnake();	
+	public void playerTurn(SnakeGame game) {
+		controller.controlSnake(game, this);
 	}
 	
 	public boolean isAlive() {

@@ -10,7 +10,7 @@ public class Wall extends GameObject {
 		player.setAlive(false);;
 	}
 	
-	public String visit(IVisitor visitor) {
-		return visitor.visit(this);
+	public void visit(IVisitor visitor) {
+		visitor.visit(this);
 	}
 }

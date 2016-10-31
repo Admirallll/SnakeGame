@@ -1,7 +1,7 @@
 package ru.admirall.snake;
 
 
-public abstract class GameObject {
+public abstract class GameObject implements ICollider {
 	private Location location;
 	
 	public GameObject(Location location) {
@@ -14,5 +14,5 @@ public abstract class GameObject {
 	
 	public abstract void collisionAction(SnakeGame game, Player player);
 	
-	public abstract String visit(IVisitor visitor);
+	public abstract void visit(IVisitor visitor);
 }

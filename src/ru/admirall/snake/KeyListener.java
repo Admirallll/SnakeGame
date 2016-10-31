@@ -22,13 +22,5 @@ public class KeyListener extends KeyAdapter
     {
         for (PlayerController controller: controllers)
 			controller.listenKey(keyEvent.getKeyCode());
-//        if (key == KeyEvent.VK_RIGHT && game.getCurrentDirection() != Direction.West)
-//            direction = Direction.East;
-//        else if (key == KeyEvent.VK_LEFT && game.getCurrentDirection() != Direction.East)
-//            direction = Direction.West;
-//        else if (key == KeyEvent.VK_DOWN && game.getCurrentDirection() != Direction.North)
-//            direction = Direction.South;
-//        else if (key == KeyEvent.VK_UP && game.getCurrentDirection() != Direction.South)
-//            direction = Direction.North;
     }
 }

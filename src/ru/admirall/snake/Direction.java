@@ -6,8 +6,8 @@ import java.util.Map;
 
 public enum Direction {
 	North,
-	South,
 	West,
+	South,
 	East;
 	
 	public Location directionToLocation() {

@@ -1,7 +1,7 @@
 package ru.admirall.snake;
 
 public interface IVisitor {
-	public String visit(Apple obj);
-	public String visit(Wall obj);
-	public String visit(Snake obj);
+	public void visit(Apple obj);
+	public void visit(Wall obj);
+	public void visit(Snake obj);
 }

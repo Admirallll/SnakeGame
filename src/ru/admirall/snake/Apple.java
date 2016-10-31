@@ -12,7 +12,7 @@ public class Apple extends GameObject {
 		player.getSnake().addPart();	
 	}
 	
-	public String visit(IVisitor visitor) {
-		return visitor.visit(this);
+	public void visit(IVisitor visitor) {
+		visitor.visit(this);
 	}
 }

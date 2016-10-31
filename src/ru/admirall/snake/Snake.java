@@ -1,17 +1,28 @@
 package ru.admirall.snake;
 
 
+import java.awt.Color;
 import java.util.Iterator;
 
-public class Snake implements Iterable<SnakePart> {
+public class Snake implements Iterable<SnakePart>, ICollider {
 	
 	private SnakePart head;
 	private SnakePart tail;
 	private Direction currentDirection;
+	private Color color;
 	
-	public Snake(Location headLocation) {
+	public Snake(Location headLocation, Color snakeColor) {
 		head = tail = new SnakePart(headLocation);
 		currentDirection = Direction.East;
+		color = snakeColor;
+	}
+	
+	public void setColor(Color newColor) {
+		color = newColor;
+	}
+	
+	public Color getColor() {
+		return color;
 	}
 	
 	public Direction getCurrentDirection() {
@@ -39,8 +50,8 @@ public class Snake implements Iterable<SnakePart> {
 		head.setLocation(head.getLocation().offsetLocation(currentDirection.directionToLocation()));
 	}
 	
-	public String visit(IVisitor visitor) {
-		return visitor.visit(this);
+	public void accept(IVisitor visitor) {
+		visitor.visit(this);
 	}
 	
 	public SnakePart getHead() {
