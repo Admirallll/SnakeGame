@@ -12,28 +12,41 @@ public class SnakeGame {
 
 	private boolean isEnded;
 	private int applesToCreate;
-	private List<Color> colors;
-	private List<Player> players;
-	private Level[] levels;
-	private int currentLevelIndex;
+	private ArrayList<Color> colors;
+	private ArrayList<Player> players;
+	private LevelInfo[] levels;
+	private Level currentLevel;
 	
-	public SnakeGame(Level[] levels, List<Player> players) {
+	public SnakeGame(LevelInfo[] levels, ArrayList<Player> players) {
 		this.levels = levels;
         this.players = players;
         colors = createColors();
+        for (Player player : players)
+        	player.setColor(getFreeColor());
+        changeLevel(0);
 	}
 	
-	public void changeSnakeColor(Snake snake) {
-		for (Player player : getPlayers())
-			for (Color color : getColors())
-				if (color != player.getSnake().getColor())
-					snake.setColor(color);
+	public Color getFreeColor() {
+		for (Color color : colors) {
+			boolean isFreeColor = true;
+			for (Player player : players) 
+				if (color == player.getColor())
+					isFreeColor = false;
+			if (isFreeColor)
+				return color;
+		}
+		
+		return null;
+	}
+	
+	public void changePlayerColor(Player player) {
+		player.setColor(getFreeColor());
 	}
 	
 	public ArrayList<Color> createColors() {
 		ArrayList<Color> colors = new ArrayList<Color>();
 		colors.add(Color.BLUE);
-		colors.add(Color.CYAN);
+		colors.add(Color.ORANGE);
 		colors.add(Color.RED);
 		colors.add(Color.GREEN);
 		return colors;
@@ -42,13 +55,13 @@ public class SnakeGame {
 	public List<Color> getColors() {
 		return colors;
 	}
+	
+	public void changeLevel(int nextLevelIndex) {
+		currentLevel = new Level(levels[nextLevelIndex], players);
+	}
 
 	public Level getLevel(){
-	    return levels[currentLevelIndex];
-    }
-
-    public void setCurrentLevelIndex(int index){
-        currentLevelIndex = index;
+	    return currentLevel;
     }
 	
 	public void addApplesToCreate(int apples) {
@@ -57,7 +70,7 @@ public class SnakeGame {
 	
 	public void createAppleOnField() {
 		Location randomLocation = getRandomEmptyLocation();
-		getLevel().addObject(new Apple(randomLocation));
+		currentLevel.addObject(new Apple(randomLocation));
 	}
 	
 	public void gameTurn() {

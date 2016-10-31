@@ -11,18 +11,18 @@ import java.util.List;
 class LevelInfo {
     public int width;
     public int height;
-    public Location snakeStart;
+    public ArrayList<Location> snakeStarts;
     public List<GameObject> objects;
     public boolean borders;
 
     public LevelInfo() {
         objects = new ArrayList<GameObject>();
+        snakeStarts = new ArrayList<Location>();
     }
 }
 
 public class LevelLoader {
-	public static Level loadLevelFromFile(String filename) {
-	    // TODO remove levelInfo?
+	public static LevelInfo loadLevelFromFile(String filename) {
 		LevelInfo levelInfo = new LevelInfo();
 		String line;
 		BufferedReader reader;
@@ -36,9 +36,7 @@ public class LevelLoader {
 		} catch (IOException e) {
 
 		}
-		if (levelInfo.borders)
-			placeBorders(levelInfo);
-		return new Level(levelInfo.width, levelInfo.height, levelInfo.objects);
+		return levelInfo;
 	}
 	
 	private static void parseLine(LevelInfo info, String line) {
@@ -53,7 +51,7 @@ public class LevelLoader {
 				info.height = parseInt(value);
 				break;
 			case "snake":
-				info.snakeStart = parseLocation(value);
+				info.snakeStarts.add(parseLocation(value));
 				break;
 			case "apple":
 				info.objects.add(new Apple(parseLocation(value)));
@@ -80,12 +78,5 @@ public class LevelLoader {
 //		if (coords.length != 2)
 //			throw new Exception("Wrong file");
 		return new Location(parseInt(coords[0]), parseInt(coords[1]));
-	}
-
-	private static void placeBorders(LevelInfo info) {
-		for (int x = 0; x < info.width; x++)
-			for (int y = 0; y < info.height; y++)
-				if (x == 0 || y == 0 || x == info.width-1 || y == info.height-1)
-					info.objects.add(new Wall(new Location(x, y)));
 	}
 }

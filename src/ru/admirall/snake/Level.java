@@ -8,11 +8,22 @@ public class Level implements Iterable<GameObject> {
     public final int height;
     private List<GameObject> objects;
 
-    public Level(int width, int height, List<GameObject> objects){
-        this.width = width;
-        this.height = height;
-        this.objects = objects;
+    public Level(LevelInfo levelInfo, ArrayList<Player> players){
+        this.width = levelInfo.width;
+        this.height = levelInfo.height;
+        this.objects = levelInfo.objects;
+        for (int i = 0; i < players.size(); i++)
+        	players.get(i).createSnake(levelInfo.snakeStarts.get(i));
+        if (levelInfo.borders)
+        	placeBorders(levelInfo.width, levelInfo.height);
     }
+    
+	private void placeBorders(int width, int height) {
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				if (x == 0 || y == 0 || x == width-1 || y == height-1)
+					objects.add(new Wall(new Location(x, y)));
+	}
 
     public List<GameObject> getObjects() {
         return objects;

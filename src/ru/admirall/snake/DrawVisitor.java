@@ -28,11 +28,10 @@ public class DrawVisitor implements IVisitor {
 	}
 
 	@Override
-	public void visit(Snake snake) {
-		for (SnakePart part : snake){
+	public void visit(Player player) {
+		for (SnakePart part : player.getSnake()){
 			Color oldColor = graphics.getColor();
-			//drawTexture("snake.jpg", part.getLocation());
-			graphics.setColor(snake.getColor());
+			graphics.setColor(player.getColor());
 			graphics.fillRect(part.getLocation().getX() * textureSize, part.getLocation().getY() * textureSize, textureSize, textureSize);	
 			graphics.setColor(oldColor);
 		}
@@ -45,5 +44,16 @@ public class DrawVisitor implements IVisitor {
 	
 	private void drawTexture(String filename, Location loc) {
 		drawTexture(filename, loc.getX(), loc.getY());
+	}
+
+	@Override
+	public void visit(NextLevelDoor door) {
+		Color oldColor = graphics.getColor();
+		if (door.isOpened())
+			graphics.setColor(Color.ORANGE);
+		else
+			graphics.setColor(Color.YELLOW);
+		graphics.fillRect(door.getLocation().getX() * textureSize, door.getLocation().getY() * textureSize, textureSize, textureSize);	
+		graphics.setColor(oldColor);
 	}
 }

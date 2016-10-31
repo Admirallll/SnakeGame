@@ -6,25 +6,14 @@ import java.util.Iterator;
 
 public class Snake implements Iterable<SnakePart>, ICollider {
 	
-	
 	private Direction prevDirection;
 	private SnakePart head;
 	private SnakePart tail;
 	private Direction currentDirection;
-	private Color color;
 	
-	public Snake(Location headLocation, Color snakeColor) {
+	public Snake(Location headLocation) {
 		head = tail = new SnakePart(headLocation);
 		currentDirection = Direction.East;
-		color = snakeColor;
-	}
-	
-	public void setColor(Color newColor) {
-		color = newColor;
-	}
-	
-	public Color getColor() {
-		return color;
 	}
 	
 	public Direction getCurrentDirection() {
@@ -51,10 +40,6 @@ public class Snake implements Iterable<SnakePart>, ICollider {
 				currentPart.setLocation(currentPart.getNextPart().getLocation());
 		}
 		head.setLocation(head.getLocation().offsetLocation(currentDirection.directionToLocation()));
-	}
-	
-	public void accept(IVisitor visitor) {
-		visitor.visit(this);
 	}
 	
 	public SnakePart getHead() {

@@ -30,11 +30,9 @@ public class MainWindow extends JFrame implements ActionListener
     public MainWindow()
     {
     	super("Snake game");
-
-
-        Level[] levels = Arrays.stream(findLevelFiles("levels"))
+        LevelInfo[] levels = Arrays.stream(findLevelFiles("levels"))
                 .map(LevelLoader::loadLevelFromFile)
-                .toArray(Level[]::new);
+                .toArray(LevelInfo[]::new);
 
         game = new SnakeGame(levels, createPlayers());
 
@@ -62,9 +60,9 @@ public class MainWindow extends JFrame implements ActionListener
     
     public ArrayList<Player> createPlayers() {
     	ArrayList<Player> players = new ArrayList<>();
-        Player player1 = new Player(new KeyboardPlayerController(getPlayer1Keys()), new Location(5, 5), Color.GREEN);
-        Player player2 = new Player(new KeyboardPlayerController(getPlayer2Keys()), new Location(1, 1), Color.RED);
-        Player botPlayer1 = new Player(new BotController(), new Location(10, 10), Color.BLUE);
+        Player player1 = new Player(new KeyboardPlayerController(getPlayer1Keys()));
+        Player player2 = new Player(new KeyboardPlayerController(getPlayer2Keys()));
+        Player botPlayer1 = new Player(new BotController());
         players.add(player1);
         players.add(botPlayer1);
         players.add(player2);
@@ -81,7 +79,7 @@ public class MainWindow extends JFrame implements ActionListener
     	keys.put(KeyEvent.VK_S, (player) -> player.getSnake().setDirection(Direction.South));
     	keys.put(KeyEvent.VK_A, (player) -> player.getSnake().setDirection(Direction.West));
     	keys.put(KeyEvent.VK_D,(player) ->  player.getSnake().setDirection(Direction.East));
-    	keys.put(KeyEvent.VK_SPACE, (player) -> game.changeSnakeColor(player.getSnake()));
+    	keys.put(KeyEvent.VK_SPACE, (player) -> game.changePlayerColor(player));
     	return keys;
     }
     
@@ -91,7 +89,7 @@ public class MainWindow extends JFrame implements ActionListener
     	keys.put(KeyEvent.VK_DOWN, (player) -> player.getSnake().setDirection(Direction.South));
     	keys.put(KeyEvent.VK_LEFT, (player) -> player.getSnake().setDirection(Direction.West));
     	keys.put(KeyEvent.VK_RIGHT,(player) ->  player.getSnake().setDirection(Direction.East));
-    	keys.put(KeyEvent.VK_ENTER, (player) -> game.changeSnakeColor(player.getSnake()));
+    	keys.put(KeyEvent.VK_ENTER, (player) -> game.changePlayerColor(player));
     	return keys;
     }
 
@@ -100,7 +98,7 @@ public class MainWindow extends JFrame implements ActionListener
         bufferedGraphics.fill3DRect(0, 0, getWidth(), getHeight(), true);
     	for (Player player : game.getPlayers())
     		if (player.isAlive())
-    			player.getSnake().accept(drawVisitor);
+    			player.accept(drawVisitor);
         drawObjects(game.getLevel());
         g.drawImage(image, 0, 0, getSize().width, getSize().height, null);
     }
