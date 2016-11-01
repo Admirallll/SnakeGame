@@ -8,6 +8,8 @@ public class Apple extends GameObject {
 	
 	public void collisionAction(SnakeGame game, Player player) {
 		game.getLevel().deleteObject(this);
+		player.addPoints(1);
+		game.getLevel().addPlayersPoints(1);
 		game.addApplesToCreate(1);
 		player.getSnake().addPart();	
 	}

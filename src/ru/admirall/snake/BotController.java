@@ -11,8 +11,8 @@ public class BotController implements IPlayerController {
 		for (Direction dir : Direction.values())
 		{
 			if (!dir.isOpposingDirections(current)) {
-			    Location location = player.getSnake().getLocation().offsetLocation(dir.directionToLocation());
-                if (game.getCollisions(location, player.getSnake().getHead()).size() == 0)
+			    Location location = player.getSnake().getNextSnakeLocation(dir.directionToLocation());
+                if (game.getCollisions(location, player.getSnake().getHead()).stream().filter(x -> x instanceof ICollisionKiller).count() == 0)
                     freeDirections.add(dir);
             }
 		}

@@ -1,6 +1,6 @@
 package ru.admirall.snake;
 
-public class Wall extends GameObject {
+public class Wall extends GameObject implements ICollisionKiller {
 
 	public Wall(Location location) {
 		super(location);

@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class MainWindow extends JFrame implements ActionListener
 {
@@ -30,12 +31,10 @@ public class MainWindow extends JFrame implements ActionListener
     public MainWindow()
     {
     	super("Snake game");
-        LevelInfo[] levels = Arrays.stream(findLevelFiles("levels"))
+        LevelInfo[] levels = findLevelFiles("levels").stream()
                 .map(LevelLoader::loadLevelFromFile)
                 .toArray(LevelInfo[]::new);
-
         game = new SnakeGame(levels, createPlayers());
-
         drawVisitor = new DrawVisitor();
         initializeWindow();
         timer.start();
@@ -53,9 +52,16 @@ public class MainWindow extends JFrame implements ActionListener
         bufferedGraphics.setColor(Color.LIGHT_GRAY);
     }
 
-    private static String[] findLevelFiles(String directory){
-        // TODO
-        return new String[]{"level.txt"};
+    private static List<String> findLevelFiles(String directory){
+    	List<String> files = new ArrayList<String>();
+    	File f = new File(directory);
+        String[] list = f.list();  
+        for (String file : list) {      
+            if (file.startsWith("level")) {
+                files.add(directory + "/" + file);
+            }
+        }
+        return files;
     }
     
     public ArrayList<Player> createPlayers() {

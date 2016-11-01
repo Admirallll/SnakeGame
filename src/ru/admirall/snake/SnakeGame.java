@@ -3,6 +3,7 @@ package ru.admirall.snake;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -29,7 +30,7 @@ public class SnakeGame {
 	public Color getFreeColor() {
 		for (Color color : colors) {
 			boolean isFreeColor = true;
-			for (Player player : players) 
+			for (Player player : players.stream().filter((p) -> p.isAlive()).toArray(Player[]::new)) 
 				if (color == player.getColor())
 					isFreeColor = false;
 			if (isFreeColor)
@@ -78,17 +79,22 @@ public class SnakeGame {
 			player.playerTurn(this);
 			if (!player.isAlive())
 				continue;
-			for (ICollider obj : getCollisions(player.getSnake().getHead()))
+			for (ICollider obj : getCollisions(player.getSnake().getNextSnakeLocation(), player.getSnake().getHead()))
 				obj.collisionAction(this, player);
 			player.getSnake().moveSnake();
 		}
 		
-		isEnded = isGameEnded();
+		for (GameObject obj : getLevel().getObjects())
+			if (obj instanceof ITurnActioner) {
+				ITurnActioner actioner = (ITurnActioner) obj;
+				actioner.turnAction(this);
+			}
 		
 		while (applesToCreate > 0) {
 			createAppleOnField();
 			applesToCreate--;
 		}
+		isEnded = isGameEnded();
 	}
 	
 	public List<ICollider> getCollisions(SnakePart target) {

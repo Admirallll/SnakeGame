@@ -1,13 +1,14 @@
 package ru.admirall.snake;
-
-public class NextLevelDoor extends GameObject {
+public class NextLevelDoor extends GameObject implements ITurnActioner {
 
 	private int nextLevel;
 	private boolean isOpened = false;
 	private int openTreshold;
 	
-	public NextLevelDoor(Location location) {
+	public NextLevelDoor(Location location, int openTreshold, int nextLevel) {
 		super(location);
+		this.nextLevel = nextLevel;
+		this.openTreshold = openTreshold;
 	}
 
 	@Override
@@ -31,5 +32,10 @@ public class NextLevelDoor extends GameObject {
 	
 	public boolean isOpened() {
 		return isOpened;
+	}
+
+	@Override
+	public void turnAction(SnakeGame game) {
+		tryOpen(game.getLevel().getPlayersPoints());
 	}
 }

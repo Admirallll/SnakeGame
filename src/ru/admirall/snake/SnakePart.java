@@ -1,7 +1,7 @@
 package ru.admirall.snake;
 
 
-public class SnakePart {
+public class SnakePart{
 	
 	private Location location;
 	private SnakePart nextPart;

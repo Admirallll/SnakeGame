@@ -5,3 +5,4 @@ snake:3,3
 snake:7,7
 apple:7,5
 borders:true
+door:13,13:5:1

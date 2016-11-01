@@ -4,7 +4,7 @@ package ru.admirall.snake;
 import java.awt.Color;
 import java.util.Iterator;
 
-public class Snake implements Iterable<SnakePart>, ICollider {
+public class Snake implements Iterable<SnakePart>, ICollider, ICollisionKiller {
 	
 	private Direction prevDirection;
 	private SnakePart head;
@@ -40,6 +40,14 @@ public class Snake implements Iterable<SnakePart>, ICollider {
 				currentPart.setLocation(currentPart.getNextPart().getLocation());
 		}
 		head.setLocation(head.getLocation().offsetLocation(currentDirection.directionToLocation()));
+	}
+	
+	public Location getNextSnakeLocation(Location location) {
+		return getLocation().offsetLocation(location);
+	}
+	
+	public Location getNextSnakeLocation() {
+		return getNextSnakeLocation(currentDirection.directionToLocation());
 	}
 	
 	public SnakePart getHead() {

@@ -40,27 +40,28 @@ public class LevelLoader {
 	}
 	
 	private static void parseLine(LevelInfo info, String line) {
-		String name = line.split(":")[0];
-		String value = line.split(":")[1];
-		
-		switch (name) {
+		String[] args = line.split(":");
+		switch (args[0]) {
 			case "width":
-				info.width = parseInt(value);
+				info.width = parseInt(args[1]);
 				break;
 			case "height":
-				info.height = parseInt(value);
+				info.height = parseInt(args[1]);
 				break;
 			case "snake":
-				info.snakeStarts.add(parseLocation(value));
+				info.snakeStarts.add(parseLocation(args[1]));
 				break;
 			case "apple":
-				info.objects.add(new Apple(parseLocation(value)));
+				info.objects.add(new Apple(parseLocation(args[1])));
 				break;
 			case "wall":
-				info.objects.add(new Wall(parseLocation(value)));
+				info.objects.add(new Wall(parseLocation(args[1])));
 				break;
 			case "borders":
-				info.borders = parseBoolean(value);
+				info.borders = parseBoolean(args[1]);
+				break;
+			case "door":
+				info.objects.add(new NextLevelDoor(parseLocation(args[1]), parseInt(args[2]), parseInt(args[3])));
 				break;
 		}
 	}

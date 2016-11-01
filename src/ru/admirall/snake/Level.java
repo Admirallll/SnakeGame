@@ -7,15 +7,24 @@ public class Level implements Iterable<GameObject> {
     public final int width;
     public final int height;
     private List<GameObject> objects;
+    private int playersPoints;
 
     public Level(LevelInfo levelInfo, ArrayList<Player> players){
         this.width = levelInfo.width;
         this.height = levelInfo.height;
-        this.objects = levelInfo.objects;
+        objects = new ArrayList<>(levelInfo.objects);
         for (int i = 0; i < players.size(); i++)
         	players.get(i).createSnake(levelInfo.snakeStarts.get(i));
         if (levelInfo.borders)
         	placeBorders(levelInfo.width, levelInfo.height);
+    }
+    
+    public int getPlayersPoints() {
+    	return playersPoints;
+    }
+    
+    public void addPlayersPoints(int bonusPoints) {
+    	playersPoints += bonusPoints;
     }
     
 	private void placeBorders(int width, int height) {

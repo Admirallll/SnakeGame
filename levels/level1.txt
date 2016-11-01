@@ -1,0 +1,8 @@
+width:20
+height:20
+snake:5,5
+snake:3,3
+snake:7,7
+apple:7,5
+borders:true
+door:17,10:5:2

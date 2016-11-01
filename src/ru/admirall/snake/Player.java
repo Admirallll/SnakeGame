@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public class Player {
 	private Snake snake;
-	private int score;
+	private int points;
 	private IPlayerController controller;
 	private boolean isAlive = true;
 	private Color color;
@@ -34,7 +34,7 @@ public class Player {
 	}
 	
 	public void addPoints(int pointsChange) {
-		score += pointsChange;
+		points += pointsChange;
 	}
 	
 	public void setAlive(boolean isAlive) {
@@ -47,6 +47,10 @@ public class Player {
 	
 	public boolean isAlive() {
 		return isAlive;
+	}
+	
+	public int getPoints() {
+		return points;
 	}
 	
 	public KeyboardPlayerController getController() {
