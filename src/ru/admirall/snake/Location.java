@@ -1,9 +1,10 @@
 package ru.admirall.snake;
 
+import java.io.Serializable;
 import java.lang.Object;
 
 
-public class Location {
+public class Location implements Serializable {
 	
 	private int x;
 	private int y;

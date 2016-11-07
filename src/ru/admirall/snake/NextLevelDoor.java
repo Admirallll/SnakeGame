@@ -1,14 +1,15 @@
 package ru.admirall.snake;
-public class NextLevelDoor extends GameObject implements ITurnActioner {
+
+public class NextLevelDoor extends GameObject implements ITurnActioner, ICollisionKiller {
 
 	private int nextLevel;
 	private boolean isOpened = false;
-	private int openTreshold;
+	private int openThreshold;
 	
-	public NextLevelDoor(Location location, int openTreshold, int nextLevel) {
+	public NextLevelDoor(Location location, int openThreshold, int nextLevel) {
 		super(location);
 		this.nextLevel = nextLevel;
-		this.openTreshold = openTreshold;
+		this.openThreshold = openThreshold;
 	}
 
 	@Override
@@ -25,7 +26,7 @@ public class NextLevelDoor extends GameObject implements ITurnActioner {
 	}
 	
 	public boolean tryOpen(int points) {
-		if (points >= openTreshold)
+		if (points >= openThreshold)
 			isOpened = true;
 		return isOpened;
 	}

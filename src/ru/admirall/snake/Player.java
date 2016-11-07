@@ -1,11 +1,12 @@
 package ru.admirall.snake;
 
 import java.awt.Color;
+import java.io.Serializable;
 
-public class Player {
+public class Player implements Serializable {
 	private Snake snake;
 	private int points;
-	private IPlayerController controller;
+	transient private IPlayerController controller;
 	private boolean isAlive = true;
 	private Color color;
 	
@@ -22,7 +23,8 @@ public class Player {
 	}
 	
 	public void accept(IVisitor visitor) {
-		visitor.visit(this);
+		if (isAlive)
+			visitor.visit(this);
 	}
 	
 	public void setColor(Color newColor) {
@@ -53,8 +55,8 @@ public class Player {
 		return points;
 	}
 	
-	public KeyboardPlayerController getController() {
-		return (KeyboardPlayerController) controller;
+	public IPlayerController getController() {
+		return controller;
 	}
 	
 }

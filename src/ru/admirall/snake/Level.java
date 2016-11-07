@@ -1,22 +1,21 @@
 package ru.admirall.snake;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Level implements Iterable<GameObject> {
+public class Level implements Iterable<GameObject>, Serializable {
     public final int width;
     public final int height;
     private List<GameObject> objects;
     private int playersPoints;
 
-    public Level(LevelInfo levelInfo, ArrayList<Player> players){
+    public Level(LevelInfo levelInfo, List<Player> players){
         this.width = levelInfo.width;
         this.height = levelInfo.height;
         objects = new ArrayList<>(levelInfo.objects);
         for (int i = 0; i < players.size(); i++)
         	players.get(i).createSnake(levelInfo.snakeStarts.get(i));
-        if (levelInfo.borders)
-        	placeBorders(levelInfo.width, levelInfo.height);
     }
     
     public int getPlayersPoints() {
@@ -26,13 +25,6 @@ public class Level implements Iterable<GameObject> {
     public void addPlayersPoints(int bonusPoints) {
     	playersPoints += bonusPoints;
     }
-    
-	private void placeBorders(int width, int height) {
-		for (int x = 0; x < width; x++)
-			for (int y = 0; y < height; y++)
-				if (x == 0 || y == 0 || x == width-1 || y == height-1)
-					objects.add(new Wall(new Location(x, y)));
-	}
 
     public List<GameObject> getObjects() {
         return objects;

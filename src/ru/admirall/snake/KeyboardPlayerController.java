@@ -2,13 +2,14 @@ package ru.admirall.snake;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
 public class KeyboardPlayerController implements IPlayerController {
 	private Map<Integer, ControllerAction> keyToAction;
 	private ArrayList<ControllerAction> actions = new ArrayList<>();
-	
+
 	public KeyboardPlayerController(Map<Integer, ControllerAction> keysToActions) {
 		this.keyToAction = keysToActions;
 	}
@@ -20,7 +21,7 @@ public class KeyboardPlayerController implements IPlayerController {
 
 	public void controlSnake(SnakeGame game, Player player) {
 		for (ControllerAction act : actions)
-			act.action(player);
+			act.action(game, player);
 		actions.clear();
 	}
 }

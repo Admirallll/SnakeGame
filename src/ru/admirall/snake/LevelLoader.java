@@ -5,21 +5,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-class LevelInfo {
-    public int width;
-    public int height;
-    public ArrayList<Location> snakeStarts;
-    public List<GameObject> objects;
-    public boolean borders;
-
-    public LevelInfo() {
-        objects = new ArrayList<GameObject>();
-        snakeStarts = new ArrayList<Location>();
-    }
-}
 
 public class LevelLoader {
 	public static LevelInfo loadLevelFromFile(String filename) {
@@ -31,11 +17,11 @@ public class LevelLoader {
 			while((line = reader.readLine()) != null){
 			    parseLine(levelInfo, line);
 			}
-		} catch (FileNotFoundException e) {
-			
 		} catch (IOException e) {
 
 		}
+		if (levelInfo.borders)
+		    placeBorders(levelInfo);
 		return levelInfo;
 	}
 	
@@ -80,4 +66,11 @@ public class LevelLoader {
 //			throw new Exception("Wrong file");
 		return new Location(parseInt(coords[0]), parseInt(coords[1]));
 	}
+
+    private static void placeBorders(LevelInfo info) {
+        for (int x = 0; x < info.width; x++)
+            for (int y = 0; y < info.height; y++)
+                if (x == 0 || y == 0 || x == info.width-1 || y == info.height-1)
+                    info.objects.add(new Wall(new Location(x, y)));
+    }
 }

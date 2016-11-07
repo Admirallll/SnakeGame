@@ -2,23 +2,22 @@ package ru.admirall.snake;
 
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class SnakeGame {
+public class SnakeGame implements IGame, Serializable {
 
-	private boolean isEnded;
-	private int applesToCreate;
-	private ArrayList<Color> colors;
-	private ArrayList<Player> players;
-	private LevelInfo[] levels;
+	transient private int applesToCreate;
+	transient private List<Color> colors;
+	private List<Player> players;
+	transient private LevelInfo[] levels;
 	private Level currentLevel;
 	
-	public SnakeGame(LevelInfo[] levels, ArrayList<Player> players) {
+	public SnakeGame(LevelInfo[] levels, List<Player> players) {
 		this.levels = levels;
         this.players = players;
         colors = createColors();
@@ -30,7 +29,7 @@ public class SnakeGame {
 	public Color getFreeColor() {
 		for (Color color : colors) {
 			boolean isFreeColor = true;
-			for (Player player : players.stream().filter((p) -> p.isAlive()).toArray(Player[]::new)) 
+			for (Player player : players.stream().filter(Player::isAlive).toArray(Player[]::new))
 				if (color == player.getColor())
 					isFreeColor = false;
 			if (isFreeColor)
@@ -45,7 +44,7 @@ public class SnakeGame {
 	}
 	
 	public ArrayList<Color> createColors() {
-		ArrayList<Color> colors = new ArrayList<Color>();
+		ArrayList<Color> colors = new ArrayList<>();
 		colors.add(Color.BLUE);
 		colors.add(Color.ORANGE);
 		colors.add(Color.RED);
@@ -68,36 +67,41 @@ public class SnakeGame {
 	public void addApplesToCreate(int apples) {
 		applesToCreate += apples;
 	}
+
+    private void createApplesOnField() {
+        while (applesToCreate > 0) {
+            Location randomLocation = getRandomEmptyLocation();
+            currentLevel.addObject(new Apple(randomLocation));
+            applesToCreate--;
+        }
+    }
 	
-	public void createAppleOnField() {
-		Location randomLocation = getRandomEmptyLocation();
-		currentLevel.addObject(new Apple(randomLocation));
+	public void turn() {
+        turnPlayers();
+
+        handleTurnActions();
+
+        createApplesOnField();
 	}
-	
-	public void gameTurn() {
-		for (Player player : players) {
-			player.playerTurn(this);
-			if (!player.isAlive())
-				continue;
-			for (ICollider obj : getCollisions(player.getSnake().getNextSnakeLocation(), player.getSnake().getHead()))
-				obj.collisionAction(this, player);
-			player.getSnake().moveSnake();
-		}
-		
-		for (GameObject obj : getLevel().getObjects())
-			if (obj instanceof ITurnActioner) {
-				ITurnActioner actioner = (ITurnActioner) obj;
-				actioner.turnAction(this);
-			}
-		
-		while (applesToCreate > 0) {
-			createAppleOnField();
-			applesToCreate--;
-		}
-		isEnded = isGameEnded();
-	}
-	
-	public List<ICollider> getCollisions(SnakePart target) {
+
+    private void turnPlayers() {
+        for (Player player : players.stream().filter(Player::isAlive).toArray(Player[]::new)) {
+            player.playerTurn(this);
+            for (ICollider obj : getCollisions(player.getSnake().getNextSnakeLocation(), player.getSnake().getHead()))
+                obj.collisionAction(this, player);
+            player.getSnake().moveSnake();
+        }
+    }
+
+    private void handleTurnActions() {
+        for (GameObject obj : getLevel().getObjects())
+            if (obj instanceof ITurnActioner) {
+                ITurnActioner actioner = (ITurnActioner) obj;
+                actioner.turnAction(this);
+            }
+    }
+
+    public List<ICollider> getCollisions(SnakePart target) {
         return getCollisions(target.getLocation(), target);
 	}
 
@@ -117,20 +121,12 @@ public class SnakeGame {
 		return players;
 	}
 	
-	private boolean isGameEnded() {
+	public boolean isEnded() {
 		int alivePlayers = 0;
 		for (Player player : players)
 			if (player.isAlive())
 				alivePlayers++;
 		return alivePlayers < 2;
-	}
-
-	public void endGame() {
-		isEnded = true;
-	}
-	
-	public boolean isEnded() {
-		return isEnded;
 	}
 	
 	public Set<Location> getNonEmptyLocations() {

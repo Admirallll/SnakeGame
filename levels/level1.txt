@@ -6,3 +6,6 @@ snake:7,7
 apple:7,5
 borders:true
 door:17,10:5:2
+wall:10,10
+wall:10,11
+wall:10,12

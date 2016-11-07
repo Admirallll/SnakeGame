@@ -1,5 +1,5 @@
 package ru.admirall.snake;
 
 public interface ControllerAction {
-	void action(Player player);
+	void action(SnakeGame game, Player player);
 }

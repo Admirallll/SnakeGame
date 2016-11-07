@@ -1,7 +1,9 @@
 package ru.admirall.snake;
 
 
-public abstract class GameObject implements ICollider {
+import java.io.Serializable;
+
+public abstract class GameObject implements ICollider, Serializable {
 	private Location location;
 	
 	public GameObject(Location location) {

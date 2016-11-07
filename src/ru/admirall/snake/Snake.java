@@ -2,9 +2,10 @@ package ru.admirall.snake;
 
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.Iterator;
 
-public class Snake implements Iterable<SnakePart>, ICollider, ICollisionKiller {
+public class Snake implements Iterable<SnakePart>, ICollider, ICollisionKiller, Serializable {
 	
 	private Direction prevDirection;
 	private SnakePart head;

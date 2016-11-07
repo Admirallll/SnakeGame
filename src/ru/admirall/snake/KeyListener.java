@@ -11,7 +11,7 @@ public class KeyListener extends KeyAdapter
 	
 	public KeyListener() {
 		super();
-		controllers = new ArrayList<KeyboardPlayerController>();
+		controllers = new ArrayList<>();
 	}
 	
 	public void addListener(KeyboardPlayerController controller) {

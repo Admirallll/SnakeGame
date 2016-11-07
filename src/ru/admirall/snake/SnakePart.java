@@ -1,7 +1,9 @@
 package ru.admirall.snake;
 
 
-public class SnakePart{
+import java.io.Serializable;
+
+public class SnakePart implements Serializable{
 	
 	private Location location;
 	private SnakePart nextPart;

@@ -1,7 +1,6 @@
 package ru.admirall.snake;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.swing.ImageIcon;
 
@@ -11,6 +10,7 @@ public class DrawVisitor implements IVisitor {
 	
 	public void setGraphics(Graphics g) {
 		graphics = g;
+        ((Graphics2D)graphics).setStroke(new BasicStroke(10));
 	}
 	
 	public Graphics getGraphics() {
@@ -49,11 +49,19 @@ public class DrawVisitor implements IVisitor {
 	@Override
 	public void visit(NextLevelDoor door) {
 		Color oldColor = graphics.getColor();
+        graphics.setColor(new Color(102, 51, 0));
 		if (door.isOpened())
-			graphics.setColor(Color.ORANGE);
+		    drawCell(door.getLocation());
 		else
-			graphics.setColor(Color.YELLOW);
-		graphics.fillRect(door.getLocation().getX() * textureSize, door.getLocation().getY() * textureSize, textureSize, textureSize);	
+			fillCell(door.getLocation());
 		graphics.setColor(oldColor);
+	}
+
+	private void fillCell(Location location){
+		graphics.fillRect(location.getX() * textureSize, location.getY() * textureSize, textureSize, textureSize);
+	}
+
+	private void drawCell(Location location){
+		graphics.drawRect(location.getX() * textureSize, location.getY() * textureSize, textureSize, textureSize);
 	}
 }
