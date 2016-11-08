@@ -20,26 +20,28 @@ public class Main {
 
         // TODO: окошко с настройками режима игры
 
-        ApplicationMode mode = args.length > 0 ? ApplicationMode.Client : ApplicationMode.Server;
-
-        IGame game;
-        List<Player> players = null;
-
-        if (mode == ApplicationMode.Server) {
-            LevelInfo[] levels = findLevelFiles("levels").stream()
-                    .map(LevelLoader::loadLevelFromFile)
-                    .toArray(LevelInfo[]::new);
-            players = createPlayers();
-            game = new SnakeGame(levels, players);
-            new Thread(new GameServer(port, (SnakeGame)game)).start();
-        } else {
-            game = new GameClient(args[0], Integer.parseInt(args[1]));
-        }
-
-        JFrame frame = new GameWindow(game);
-        if (mode == ApplicationMode.Server)
-            frame.addKeyListener(createKeyListener(players));
-        frame.setVisible(true);
+//        ApplicationMode mode = args.length > 0 ? ApplicationMode.Client : ApplicationMode.Server;
+//
+//        IGame game;
+//        List<Player> players = null;
+//
+//        if (mode == ApplicationMode.Server) {
+//            LevelInfo[] levels = findLevelFiles("levels").stream()
+//                    .map(LevelLoader::loadLevelFromFile)
+//                    .toArray(LevelInfo[]::new);
+//            players = createPlayers();
+//            game = new SnakeGame(levels, players);
+//            new Thread(new GameServer(port, (SnakeGame)game)).start();
+//        } else {
+//            game = new GameClient(args[0], Integer.parseInt(args[1]));
+//        }
+//
+//        JFrame frame = new GameWindow(game);
+//        if (mode == ApplicationMode.Server)
+//            frame.addKeyListener(createKeyListener(players));
+//        frame.setVisible(true);
+    	JFrame mainMenu  = new MainMenuWindow();
+    	mainMenu.setVisible(true);
     }
 
     private static List<String> findLevelFiles(String directory){
