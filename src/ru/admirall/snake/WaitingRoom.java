@@ -3,6 +3,7 @@ package ru.admirall.snake;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WaitingRoom implements Runnable {
@@ -13,6 +14,7 @@ public class WaitingRoom implements Runnable {
 
     public WaitingRoom(int port) throws IOException {
         this.socket = new ServerSocket(port);
+        connections = new ArrayList<GameConnection>();
     }
 
     @Override

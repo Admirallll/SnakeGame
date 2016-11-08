@@ -32,7 +32,6 @@ public class MainMenuWindow extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
 			window.setVisible(false);
 		}
 	}
@@ -45,7 +44,8 @@ public class MainMenuWindow extends JFrame {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.print("Multi");
+			new MultiplayerWindow().setVisible(true);
+			window.setVisible(false);
 		}
 	}
 }
