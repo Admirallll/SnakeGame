@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 enum GameConnectionMessage {
-    GameRequest, KeyPressed
+    GameRequest, GameAction
 }
 
 public class GameConnection {
@@ -51,12 +51,12 @@ public class GameConnection {
         return (SnakeGame)readObject();
     }
 
-    public void sendKey(Integer keyCode) throws IOException {
-        sendMessage(GameConnectionMessage.KeyPressed);
-        sendInt(keyCode);
+    public void sendActionCode(ActionCode code) throws IOException {
+        sendMessage(GameConnectionMessage.GameAction);
+        sendInt(code.ordinal());
     }
 
-    public int readKey() throws IOException, ClassNotFoundException {
-        return readInt();
+    public ActionCode readActionCode() throws IOException {
+        return ActionCode.values()[readInt()];
     }
 }
