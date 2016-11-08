@@ -35,7 +35,6 @@ public class SnakeGame implements IGame, Serializable {
 			if (isFreeColor)
 				return color;
 		}
-		
 		return null;
 	}
 	

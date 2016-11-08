@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-enum GameConnectionMessage{
+enum GameConnectionMessage {
     GameRequest, KeyPressed
 }
 
