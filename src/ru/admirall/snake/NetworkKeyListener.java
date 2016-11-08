@@ -7,14 +7,14 @@ import java.net.Socket;
 
 public class NetworkKeyListener extends KeyAdapter {
 
-	private GameConnection server;
+	private GameConnection serverConnection;
 	
 	public NetworkKeyListener(String serverIp, int serverPort) throws IOException {
-		server = new GameConnection(new Socket(serverIp, serverPort));
+		serverConnection = new GameConnection(new Socket(serverIp, serverPort));
 	}
 	
 	public void sendKeyToServer(int key) throws IOException {
-		server.sendKey(key);
+		//serverConnection.sendActionCode(key);
 	}
 	
 	public void keyPressed(KeyEvent keyEvent)
