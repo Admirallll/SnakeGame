@@ -23,10 +23,11 @@ public class GameWindow extends JFrame implements ActionListener
     private BufferedImage image;
     private Graphics bufferedGraphics;
 
-    public GameWindow(IGame game)
+    public GameWindow(IGame game, KeyListener keyListener)
     {
     	super("Snake game");
         this.game = game;
+        addKeyListener(keyListener);
         drawVisitor = new DrawVisitor();
         initializeWindow();
         ((DrawVisitor)drawVisitor).setGraphics(bufferedGraphics);

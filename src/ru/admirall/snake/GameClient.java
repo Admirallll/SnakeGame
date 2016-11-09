@@ -9,8 +9,8 @@ public class GameClient implements IGame {
     private SnakeGame remoteGame;
     private boolean readFailed;
 
-    public GameClient(String serverHost, int serverPort) throws IOException {
-        connection = new GameConnection(new Socket(serverHost, serverPort));
+    public GameClient(GameConnection connection) throws IOException {
+        this.connection = connection;
         turn();
     }
 

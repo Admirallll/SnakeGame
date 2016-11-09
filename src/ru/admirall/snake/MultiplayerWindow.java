@@ -3,6 +3,7 @@ package ru.admirall.snake;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.Socket;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -52,9 +53,9 @@ public class MultiplayerWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				new GameWindow(new GameClient(joinIpField.getText(), 45654));
+				GameConnection connection = new GameConnection(new Socket(joinIpField.getText(), 45654));
+				new GameWindow(new GameClient(connection), new NetworkKeyListener(connection, GameCreator.getPlayer1Keys())).setVisible(true);
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			window.setVisible(false);

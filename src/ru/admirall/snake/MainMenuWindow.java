@@ -32,6 +32,7 @@ public class MainMenuWindow extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			new SinglegameWindow().setVisible(true);
 			window.setVisible(false);
 		}
 	}

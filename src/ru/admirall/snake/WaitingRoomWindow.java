@@ -3,6 +3,7 @@ package ru.admirall.snake;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.Socket;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -28,7 +29,7 @@ public class WaitingRoomWindow extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
 		
 		try {
-			waitingRoom = new WaitingRoom(5000);
+			waitingRoom = new WaitingRoom(45654);
 		    waitingRoomThread = new Thread(waitingRoom);
 		    waitingRoomThread.start();
 		} catch (IOException e) {
@@ -52,8 +53,8 @@ public class WaitingRoomWindow extends JFrame {
 			}
 		    new GameServer(waitingRoom.getConnections());
 		    try {
-		    	
-				new GameWindow(new GameClient("127.0.0.1", 45654)).setVisible(true);
+		    	GameConnection connection = new GameConnection(new Socket("127.0.0.1", 45654));
+				new GameWindow(new GameClient(connection), new NetworkKeyListener(connection, GameCreator.getPlayer1Keys())).setVisible(true);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
