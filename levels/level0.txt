@@ -3,6 +3,8 @@ height:20
 snake:5,5
 snake:3,3
 snake:7,7
+snake:15,8
+snake:17,3
 apple:7,5
 borders:true
 door:13,13:5:1

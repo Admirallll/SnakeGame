@@ -1,5 +1,6 @@
 package ru.admirall.snake;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -24,7 +25,8 @@ public class MultiplayerWindow extends JFrame {
 		add(buttonsPanel);
 		buttonsPanel.add(createButton);
 		buttonsPanel.add(joinButton);
-		joinIpField = new JTextField("IP");
+		joinIpField = new JTextField("127.0.0.1");
+		joinIpField.setSize(50, 15);
 		buttonsPanel.add(joinIpField);
 		createButton.addActionListener(new CreateButtonAction(this));
 		joinButton.addActionListener(new JoinButtonAction(this));

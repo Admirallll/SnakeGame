@@ -1,7 +1,7 @@
 package ru.admirall.snake;
 
 public class RemotePlayer extends Player {
-    public final GameConnection connection;
+    transient public final GameConnection connection;
 
     public RemotePlayer(GameConnection connection){
         super(new PlayerController());

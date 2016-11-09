@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 
 public class GameWindow extends JFrame implements ActionListener
 {
-    private final int speed = 2;
+    private final int speed = 5;
     private final int textureSize = 32;
     private Timer timer = new Timer(1000 / speed, this);
 

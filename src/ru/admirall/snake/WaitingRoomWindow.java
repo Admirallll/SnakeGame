@@ -45,19 +45,27 @@ public class WaitingRoomWindow extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-		    waitingRoom.stop();
+            GameConnection connection = null;
+            GameClient gameClient = null;
+            try {
+                connection = new GameConnection(new Socket("127.0.0.1", 45654));
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+			waitingRoom.stop();
 		    try {
 				waitingRoomThread.join();
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
 		    new GameServer(waitingRoom.getConnections());
-		    try {
-		    	GameConnection connection = new GameConnection(new Socket("127.0.0.1", 45654));
-				new GameWindow(new GameClient(connection), new NetworkKeyListener(connection, GameCreator.getPlayer1Keys())).setVisible(true);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+            try {
+                gameClient = new GameClient(connection);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            NetworkKeyListener keyListener = new NetworkKeyListener(connection, GameCreator.getPlayer1Keys());
+            new GameWindow(gameClient, keyListener).setVisible(true);
 			window.setVisible(false);
 		}
 	}

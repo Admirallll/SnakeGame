@@ -3,14 +3,12 @@ package ru.admirall.snake;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GameServer {
     private SnakeGame game;
+    private final int turnPeriod = 700;
 
     public GameServer(List<GameConnection> connections){
         this.game = createGame(connections);
@@ -26,6 +24,12 @@ public class GameServer {
         for (RemotePlayer remotePlayer : remotePlayers){
             new Thread(()->processClient(remotePlayer)).start();
         }
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getGame().turn();
+            }
+        }, turnPeriod, turnPeriod);
     }
     
     private SnakeGame createGame(List<GameConnection> connections) {
@@ -55,8 +59,6 @@ public class GameServer {
             }
         }
     }
-    
-    
 
     private synchronized SnakeGame getGame(){
         return game;
