@@ -1,6 +1,16 @@
 package ru.admirall.snake;
 
 
+import ru.admirall.snake.gameobjects.Apple;
+import ru.admirall.snake.gameobjects.GameObject;
+import ru.admirall.snake.gameobjects.ICollider;
+import ru.admirall.snake.gameobjects.ITurnActioner;
+import ru.admirall.snake.levels.Level;
+import ru.admirall.snake.levels.LevelInfo;
+import ru.admirall.snake.players.Player;
+import ru.admirall.snake.primitives.Location;
+import ru.admirall.snake.snake.SnakePart;
+
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;

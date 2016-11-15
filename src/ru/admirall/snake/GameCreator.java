@@ -1,5 +1,10 @@
 package ru.admirall.snake;
 
+import ru.admirall.snake.levels.LevelInfo;
+import ru.admirall.snake.levels.LevelLoader;
+import ru.admirall.snake.network.GameConnection;
+import ru.admirall.snake.players.*;
+
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -10,11 +15,12 @@ import java.util.stream.Collectors;
 
 public class GameCreator {
 
-	public static SnakeGame createGame() {
+	public static SnakeGame createServerGame(List<GameConnection> connections) {
 		LevelInfo[] levels = loadLevels();
-		ArrayList<Player> players = createLocalPlayers();
-		return new SnakeGame(levels, players);
+        List<Player> remotePlayers = createRemotePlayers(connections);
+		return new SnakeGame(levels, remotePlayers);
 	}
+
 	public static LevelInfo[] loadLevels() {
         return findLevelFiles("levels").stream()
                 .map(LevelLoader::loadLevelFromFile)

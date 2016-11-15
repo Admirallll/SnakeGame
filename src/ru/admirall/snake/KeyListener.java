@@ -1,5 +1,7 @@
 package ru.admirall.snake;
 
+import ru.admirall.snake.players.KeyboardPlayerController;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
