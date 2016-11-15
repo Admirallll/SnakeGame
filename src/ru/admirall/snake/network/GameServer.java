@@ -13,8 +13,10 @@ import java.util.stream.Collectors;
 public class GameServer {
     private final SnakeGame game;
     private final int turnPeriod = 500;
+    private final List<GameConnection> connections;
 
     public GameServer(List<GameConnection> connections){
+        this.connections = connections;
         this.game = GameCreator.createServerGame(connections);
     }
 
@@ -27,6 +29,12 @@ public class GameServer {
             public void run() {
                 synchronized (GameServer.this) {
                     getGame().turn();
+                    for (GameConnection connection : connections)
+                        try {
+                            connection.sendGame(game);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                 }
             }
         }, turnPeriod, turnPeriod);

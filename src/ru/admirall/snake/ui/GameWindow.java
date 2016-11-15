@@ -7,17 +7,13 @@ import ru.admirall.snake.gameobjects.GameObject;
 import ru.admirall.snake.players.Player;
 
 import javax.swing.*;
-import javax.swing.Timer;
-
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.awt.image.BufferedImage;
 
 
-public class GameWindow extends JFrame implements ActionListener
+public class GameWindow extends SnakeGameWindowTemplate implements ActionListener
 {
     public static final int timerPeriod = 100;
     public static final int textureSize = 32;
@@ -29,9 +25,9 @@ public class GameWindow extends JFrame implements ActionListener
     private BufferedImage image;
     private Graphics bufferedGraphics;
 
-    public GameWindow(IGame game, KeyListener keyListener)
+    public GameWindow(IGame game, KeyListener keyListener, Rectangle bounds)
     {
-    	super("Snake game");
+        super("Snake game", bounds);
         this.game = game;
         addKeyListener(keyListener);
         drawVisitor = new DrawVisitor();
@@ -41,12 +37,10 @@ public class GameWindow extends JFrame implements ActionListener
     }
 
     private void initializeWindow() {
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //setUndecorated(true);
         setSize(game.getLevel().width * textureSize, game.getLevel().height * textureSize);
         setResizable(false);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         image = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
         bufferedGraphics = image.createGraphics();
         bufferedGraphics.setColor(Color.LIGHT_GRAY);
@@ -54,6 +48,7 @@ public class GameWindow extends JFrame implements ActionListener
 
     public void paint(Graphics g)
     {
+        System.out.println("PAINT2");
         bufferedGraphics.fill3DRect(0, 0, getWidth(), getHeight(), true);
 
     	for (Player player : game.getPlayers())
@@ -70,9 +65,7 @@ public class GameWindow extends JFrame implements ActionListener
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        game.turn();
-        if (game.isEnded())
-        	System.exit(0);
+        System.out.println("PAINT");
         repaint();
     }
 }

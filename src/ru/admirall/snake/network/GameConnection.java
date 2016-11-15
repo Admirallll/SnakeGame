@@ -50,7 +50,6 @@ public class GameConnection {
     }
 
     public SnakeGame readGame() throws IOException, ClassNotFoundException {
-        sendMessage(GameConnectionMessage.GameRequest);
         return (SnakeGame)readObject();
     }
 

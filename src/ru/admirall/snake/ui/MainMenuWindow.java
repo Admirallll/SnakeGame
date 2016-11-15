@@ -1,51 +1,22 @@
 package ru.admirall.snake.ui;
 
-import java.awt.event.ActionEvent;
+import java.awt.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+public class MainMenuWindow extends SnakeGameWindowTemplate {
 
-public class MainMenuWindow extends JFrame {
-	
-	public MainMenuWindow() {
-		super();
-		setSize(500, 500);
-		JButton singleGameButton = new JButton("Single game");
-		JPanel buttonsPanel = new JPanel();
-		JButton multiplayerGameButton = new JButton("Mupliplayer game");
-		add(buttonsPanel);
-		buttonsPanel.add(singleGameButton);
-		buttonsPanel.add(multiplayerGameButton);
-		singleGameButton.addActionListener(new SingleGameButtonAction(this));
-		multiplayerGameButton.addActionListener(new MultiplayerGameButtonAction(this));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
+	public MainMenuWindow(Rectangle bounds) {
+		super("Main menu", bounds);
+		placeButton("Single game", actionEvent -> singlegameAction());
+		placeButton("Muptiplayer", actionEvent -> mupliplayerAction());
 	}
-	
-	private class SingleGameButtonAction extends AbstractAction {
-		private JFrame window;
-		public SingleGameButtonAction(JFrame window){
-			this.window = window;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			new SinglegameWindow().setVisible(true);
-			window.setVisible(false);
-		}
+
+	private void singlegameAction() {
+		new SinglegameWindow(getBounds()).setVisible(true);
+		setVisible(false);
 	}
-	
-	private class MultiplayerGameButtonAction extends AbstractAction {
-		
-		private JFrame window;
-		public  MultiplayerGameButtonAction(JFrame window) {
-			this.window = window;
-		}
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			new MultiplayerWindow().setVisible(true);
-			window.setVisible(false);
-		}
+
+	private void mupliplayerAction() {
+		new MultiplayerWindow(getBounds()).setVisible(true);
+		setVisible(false);
 	}
 }
