@@ -3,6 +3,7 @@ package ru.admirall.snake.network;
 import ru.admirall.snake.network.GameConnection;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ public class WaitingRoom {
     private Thread thread;
 
     public WaitingRoom(int port) throws IOException {
-        this.socket = new ServerSocket(port);
+        socket = new ServerSocket(port);
+        socket.setSoTimeout(200);
         connections = new ArrayList<>();
         thread = new Thread(this::acceptClients);
     }
@@ -26,6 +28,8 @@ public class WaitingRoom {
             try {
                 clientSocket = socket.accept();
                 addConnection(clientSocket);
+            } catch (InterruptedIOException ignored){
+
             } catch (IOException ignored) {
                 return;
             }
@@ -48,11 +52,6 @@ public class WaitingRoom {
 
     public void stop(){
         setStopped(true);
-//        try {
-//            //this.socket.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         try {
             thread.join();
         } catch (InterruptedException ignored) {
