@@ -32,7 +32,7 @@ public class GameClient implements IGameClient {
         try {
             game = connection.readGame();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("READ FAILED");
+            System.out.println("READ GAME FAILED");
             e.printStackTrace();
             readFailed = true;
         }

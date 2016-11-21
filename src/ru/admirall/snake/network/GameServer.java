@@ -33,7 +33,7 @@ public class GameServer {
                         try {
                             connection.sendGame(game);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            System.out.println("Cannot send game");
                         }
                 }
             }
@@ -63,7 +63,7 @@ public class GameServer {
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Cannot read message from client");
                 return;
             }
         }
