@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Exchanger;
 
-public class GameClient {
+public class GameClient implements IGameClient {
     private GameConnection connection;
     private SnakeGame remoteGame = null;
     private boolean readFailed;
