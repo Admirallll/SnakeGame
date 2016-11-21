@@ -20,7 +20,7 @@ public class SinglegameWindow extends SnakeGameWindowTemplate {
         LevelInfo[] levels = GameCreator.loadLevels();
         ArrayList<Player> players = GameCreator.createLocalPlayers();
         KeyListener keyListener = GameCreator.createKeyListener(players);
-        new GameWindow(new SnakeGame(levels, players), keyListener, getBounds()).setVisible(true);
+        //new GameWindow(new SnakeGame(levels, players), keyListener, getBounds()).setVisible(true);
         setVisible(false);
     }
 

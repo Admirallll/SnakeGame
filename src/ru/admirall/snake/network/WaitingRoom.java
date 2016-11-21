@@ -30,7 +30,7 @@ public class WaitingRoom {
                 return;
             }
         }
-    }
+}
 
     private synchronized void addConnection(Socket clientSocket) {
         connections.add(new GameConnection(clientSocket));
@@ -44,13 +44,15 @@ public class WaitingRoom {
         return isStopped;
     }
 
-    public synchronized void stop(){
-        isStopped = true;
-        try {
-            this.socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private synchronized void setStopped(boolean value) {isStopped = value; }
+
+    public void stop(){
+        setStopped(true);
+//        try {
+//            //this.socket.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         try {
             thread.join();
         } catch (InterruptedException ignored) {

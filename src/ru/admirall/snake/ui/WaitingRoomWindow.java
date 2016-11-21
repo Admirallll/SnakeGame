@@ -37,7 +37,7 @@ public class WaitingRoomWindow extends SnakeGameWindowTemplate {
             return;
         }
         KeyListener keyListener = new NetworkKeyListener(localConnection, GameCreator.getPlayer1Keys());
-        new Thread(() -> gameClient.turn()).start();
+        gameClient.startLoop();
         new GameWindow(gameClient, keyListener, getBounds()).setVisible(true);
 
         setVisible(false);

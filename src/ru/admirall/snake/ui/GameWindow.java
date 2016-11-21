@@ -1,9 +1,10 @@
 package ru.admirall.snake.ui;
 
-import ru.admirall.snake.IGame;
+import ru.admirall.snake.IGameState;
 import ru.admirall.snake.IVisitor;
 import ru.admirall.snake.KeyListener;
 import ru.admirall.snake.gameobjects.GameObject;
+import ru.admirall.snake.network.GameClient;
 import ru.admirall.snake.players.Player;
 
 import javax.swing.*;
@@ -11,24 +12,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 
 public class GameWindow extends SnakeGameWindowTemplate implements ActionListener
 {
     public static final int timerPeriod = 100;
-    public static final int textureSize = 32;
+    public static final int textureSize = 20;
     private Timer timer = new Timer(timerPeriod, this);
 
-    private IGame game;
+    private GameClient gameClient;
+    private IGameState gameState;
 
     private IVisitor drawVisitor;
     private BufferedImage image;
     private Graphics bufferedGraphics;
 
-    public GameWindow(IGame game, KeyListener keyListener, Rectangle bounds)
+    public GameWindow(GameClient gameClient, KeyListener keyListener, Rectangle bounds)
     {
         super("Snake game", bounds);
-        this.game = game;
+        this.gameClient = gameClient;
         addKeyListener(keyListener);
         drawVisitor = new DrawVisitor();
         initializeWindow();
@@ -38,7 +41,6 @@ public class GameWindow extends SnakeGameWindowTemplate implements ActionListene
 
     private void initializeWindow() {
         //setUndecorated(true);
-        setSize(game.getLevel().width * textureSize, game.getLevel().height * textureSize);
         setResizable(false);
         setLocationRelativeTo(null);
         image = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
@@ -48,12 +50,13 @@ public class GameWindow extends SnakeGameWindowTemplate implements ActionListene
 
     public void paint(Graphics g)
     {
-        System.out.println("PAINT2");
-        bufferedGraphics.fill3DRect(0, 0, getWidth(), getHeight(), true);
+        if (gameState == null)
+            return;
+        bufferedGraphics.fill3DRect(0, 0, getSize().width, getSize().height, true);
 
-    	for (Player player : game.getPlayers())
+    	for (Player player : gameState.getPlayers())
             player.accept(drawVisitor);
-        drawObjects(game.getLevel());
+        drawObjects(gameState.getLevel());
 
         g.drawImage(image, 0, 0, getSize().width, getSize().height, null);
     }
@@ -66,6 +69,14 @@ public class GameWindow extends SnakeGameWindowTemplate implements ActionListene
     @Override
     public void actionPerformed(ActionEvent arg0) {
         System.out.println("PAINT");
+        try {
+            gameState = gameClient.getGameState();
+        } catch (IOException e) {
+            System.exit(0);
+        }
+        if (gameState == null)
+            return;
+        setSize(gameState.getLevel().width * textureSize, gameState.getLevel().height * textureSize);
         repaint();
     }
 }

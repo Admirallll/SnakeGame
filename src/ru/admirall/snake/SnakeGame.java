@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class SnakeGame implements IGame, Serializable {
+public class SnakeGame implements IGameState, Serializable {
 
 	transient private int applesToCreate;
 	transient private List<Color> colors;

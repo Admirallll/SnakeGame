@@ -1,7 +1,6 @@
 package ru.admirall.snake.ui;
 
 import ru.admirall.snake.GameCreator;
-import ru.admirall.snake.IGame;
 import ru.admirall.snake.KeyListener;
 import ru.admirall.snake.Main;
 import ru.admirall.snake.network.GameClient;
@@ -32,7 +31,7 @@ public class MultiplayerWindow extends SnakeGameWindowTemplate {
     }
 
     private void joinAction() {
-        IGame gameClient;
+        GameClient gameClient;
         KeyListener keyListener;
         try {
             GameConnection connection = new GameConnection(new Socket(joinIpField.getText(), Main.port));
@@ -42,9 +41,8 @@ public class MultiplayerWindow extends SnakeGameWindowTemplate {
             e1.printStackTrace();
             return;
         }
-        new Thread(() -> gameClient.turn()).start();
+        gameClient.startLoop();
         new GameWindow(gameClient, keyListener, getBounds()).setVisible(true);
-
         setVisible(false);
     }
 }

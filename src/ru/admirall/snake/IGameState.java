@@ -5,9 +5,8 @@ import ru.admirall.snake.players.Player;
 
 import java.util.List;
 
-public interface IGame {
+public interface IGameState {
     List<Player> getPlayers();
     Level getLevel();
     boolean isEnded();
-    void turn();
 }
