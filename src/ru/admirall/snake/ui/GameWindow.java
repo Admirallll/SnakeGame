@@ -43,7 +43,7 @@ public class GameWindow extends SnakeGameWindowTemplate implements ActionListene
     }
 
     private void initializeWindow() {
-        setUndecorated(true);
+        //setUndecorated(true);
         setResizable(false);
         setLocationRelativeTo(null);
     }
