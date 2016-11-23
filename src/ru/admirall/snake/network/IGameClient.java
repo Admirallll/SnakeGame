@@ -8,6 +8,6 @@ import java.io.IOException;
  * Created by Stas on 21.11.2016.
  */
 public interface IGameClient {
-    public IGameState getGameState() throws IOException;
-    public void startLoop();
+    IGameState getGameState() throws IOException;
+    void startLoop();
 }

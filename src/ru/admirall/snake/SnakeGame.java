@@ -118,7 +118,7 @@ public class SnakeGame implements IGameState, Serializable {
         List<ICollider> result = new ArrayList<>();
         result.addAll(getLevel().getObjects(location));
 
-        for (Player player : players) {
+        for (Player player : players.stream().filter(Player::isAlive).toArray(Player[]::new)) {
             for (SnakePart snakePart : player.getSnake())
                 if (snakePart.getLocation().equals(location) && !snakePart.equals(target))
                     result.add(player.getSnake());
